@@ -1,4 +1,4 @@
-import {ADD_TODO, DELETE_TODO} from '../actions/index'
+import {ADD_TODO, DELETE_TODO, UPDATE_TODO, TOGGLE_COMPLETED, DELETE_COMPLETED} from '../actions/index'
 
 const initialState = {
     todos: [
@@ -31,11 +31,51 @@ export const rootReducer = (state = initialState, action) => {
         console.log("Delete todo payload:", action.payload)
             return{
                 ...state,
-                todos:[...state.todos.filter(todo =>{ 
-                    console.log("Filter todo", todo);
-                   return todo.value != action.payload
+                todos:[...state.todos.filter(todo => { 
+                   return todo.value !== action.payload
                 })]
             }
+        case UPDATE_TODO:
+            console.log('Update todo payload:', action.payload);
+            return{
+                ...state,
+                todos:[...state.todos.map(todo => {
+                    if (todo.value === action.payload.originalTodo){
+                        return {
+                         ...state.todo,
+                            value: action.payload.updatedTodo, 
+                            completed: false
+                            }
+                        ;
+                    } else{
+                        return todo;
+                    }
+                    
+                })]
+            }
+        case TOGGLE_COMPLETED:
+        console.log("Toggle completed action payload",action.payload)
+            return{
+                ...state,
+                todos:[...state.todos.map(todo => {
+                    if(todo.value === action.payload) {
+                        return{
+                            ...todo,
+                            completed: !state.completed
+                        }
+                    }
+                    else{
+                        return todo;
+                    }
+                })]
+            }
+        case DELETE_COMPLETED:
+        return{
+            ...state, 
+            todos:[...state.todos.filter(todo => {
+                return !todo.completed
+            })]
+        }
         default:
             return state;
     }

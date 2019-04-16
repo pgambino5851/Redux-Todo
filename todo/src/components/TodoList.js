@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import Todo from './Todo'
-import {addTodo} from '../actions/index'
+import {addTodo, deleteCompleted} from '../actions/index'
 
 class TodoList extends Component {
 
@@ -18,6 +18,14 @@ class TodoList extends Component {
     addTodo = e => {
         e.preventDefault();
         this.props.addTodo(this.state.todo);
+        this.setState({
+            todo: ''
+        })
+    }
+
+    deleteCompleted = e => {
+        e.preventDefault();
+        this.props.deleteCompleted();
     }
 
     render() {
@@ -37,6 +45,7 @@ class TodoList extends Component {
                 />
             </form>
             <button onClick = {this.addTodo}>Submit Todo</button>
+            <button onClick = {this.deleteCompleted}>Delete Completed Tasks</button>
         </div>
         )
     }
@@ -48,4 +57,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, {addTodo})(TodoList)
+export default connect(mapStateToProps, {addTodo, deleteCompleted})(TodoList)
